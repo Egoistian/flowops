@@ -158,3 +158,5 @@
 - Fresh local verification: 28 backend tests with zero failures/errors, 3 frontend tests, clean lint, production build, healthy Compose services, and 1 Chromium cross-organization E2E.
 - A sandboxed standalone Chromium launch failed at the macOS Mach-port boundary. Re-running the identical E2E with the required process permission passed without a source change, confirming an execution-environment restriction rather than an application regression.
 - Current safety checks: `PASS local-demo-network`, `PASS browser-auth-storage`, and `PASS public-safety`.
+- First remote CI RED: GitHub's Ubuntu runner exposed Compose only as `docker compose`, while the new gate called the locally installed standalone `docker-compose` command.
+- Compatibility GREEN: the gate now selects the plugin form first and falls back to the standalone command. A controlled fake-CLI regression proves the plugin-only environment before the actual rendered Compose check runs.

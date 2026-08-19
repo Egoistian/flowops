@@ -65,6 +65,7 @@ jobs:
 
       - name: Public-safety checks
         run: |
+          ./scripts/test/check-local-demo-network-compose-cli.sh
           ./scripts/check-local-demo-network.sh
           ./scripts/check-no-browser-auth-storage.sh
           ./scripts/check-public-safety.sh

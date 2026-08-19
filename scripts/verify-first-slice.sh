@@ -13,6 +13,7 @@ else
 fi
 
 printf 'VERIFY local-demo-network\n'
+"$project_root/scripts/test/check-local-demo-network-compose-cli.sh"
 "$project_root/scripts/check-local-demo-network.sh"
 
 docker_host="$(docker context inspect "$(docker context show)" --format '{{.Endpoints.docker.Host}}')"

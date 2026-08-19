@@ -4,7 +4,16 @@ set -euo pipefail
 flowops_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 cd "$flowops_root"
 
-docker-compose config --format json | ruby -rjson -e '
+if docker compose version >/dev/null 2>&1; then
+  compose=(docker compose)
+elif command -v docker-compose >/dev/null 2>&1; then
+  compose=(docker-compose)
+else
+  printf 'FAIL docker-compose-unavailable\n' >&2
+  exit 1
+fi
+
+"${compose[@]}" config --format json | ruby -rjson -e '
   config = JSON.parse($stdin.read)
   services = config.fetch("services")
 
