@@ -44,3 +44,11 @@
 - All identities, organizations, and addresses are fictional and use reserved example domains.
 - No external repository, remote, upload, or push exists.
 - No payment, settlement, platform-account, candidate, revenue, KYC, or personal data was added.
+
+## 2026-08-19 22:56 KST — Procurement domain rules
+
+- RED: procurement tests failed compilation because no money, item, request, approval-policy, or workflow types existed.
+- GREEN: server-calculated KRW totals, exact approval thresholds, item-required submission, self-approval blocking, role matching, and one-step-at-a-time approval now pass without Spring or a database.
+- Thresholds: below KRW 1,000,000 requires `REVIEWER`; KRW 1,000,000–4,999,999 adds `MANAGER`; KRW 5,000,000 and above adds `BUDGET_OWNER`.
+- Fresh full result after Task 4: 16 tests, 0 failures, 0 errors.
+- Commit: `d18f501 feat: model procurement approval rules`.
