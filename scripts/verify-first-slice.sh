@@ -26,7 +26,18 @@ printf 'VERIFY frontend-lint-test-build\n'
 
 printf 'VERIFY compose-build-health\n'
 (cd "$project_root" && "${compose[@]}" up --build --detach)
-curl -fsS 'http://127.0.0.1:4173/actuator/health' | grep -q '"status":"UP"'
+flowops_ready=0
+for attempt in {1..30}; do
+  if curl -fsS 'http://127.0.0.1:4173/actuator/health' 2>/dev/null | grep -q '"status":"UP"'; then
+    flowops_ready=1
+    break
+  fi
+  sleep 1
+done
+if [[ "$flowops_ready" -ne 1 ]]; then
+  printf 'FAIL compose-health-timeout\n' >&2
+  exit 1
+fi
 
 printf 'VERIFY playwright\n'
 (cd "$project_root/e2e" && npm test)
