@@ -27,4 +27,13 @@ class DatabaseMigrationTest extends PostgresIntegrationTest {
 
         assertThat(count).isEqualTo(4);
     }
+
+    @Test
+    void doesNotInstallDefaultCredentialsInBaseMigrations() {
+        Integer userCount = jdbc.sql("select count(*) from users")
+                .query(Integer.class)
+                .single();
+
+        assertThat(userCount).isZero();
+    }
 }
