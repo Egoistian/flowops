@@ -1,0 +1,16 @@
+FlowOps INC-001 GREEN evidence
+Command: ./gradlew test --tests com.egoistian.flowops.procurement.ConcurrentApprovalTest
+Exit code: 0
+Verified behavior:
+
+- The first approval changes the request to APPROVED.
+- A second approval with the stale expected version throws RequestVersionConflict.
+- The stable code is REQUEST_VERSION_CONFLICT.
+- Exactly one REQUEST_APPROVED audit event remains.
+- Existing approval-step rows are updated in place instead of duplicated.
+
+Selected unedited Gradle output:
+
+> Task :test
+
+BUILD SUCCESSFUL

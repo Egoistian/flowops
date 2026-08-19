@@ -52,3 +52,32 @@
 - Thresholds: below KRW 1,000,000 requires `REVIEWER`; KRW 1,000,000–4,999,999 adds `MANAGER`; KRW 5,000,000 and above adds `BUDGET_OWNER`.
 - Fresh full result after Task 4: 16 tests, 0 failures, 0 errors.
 - Commit: `d18f501 feat: model procurement approval rules`.
+
+## 2026-08-19 23:08 KST — Persistence, idempotency, and stale approval
+
+### Persistence
+
+- RED: no organization-scoped JPA store or domain version restoration contract existed.
+- The first GREEN attempt exposed a real schema mismatch: PostgreSQL `char(3)` currency versus JPA `varchar(3)`.
+- Resolution: retained immutable `V001` history and added `V003__currency_varchar.sql` instead of rewriting an applied migration.
+- Verified round trip: title, two items, KRW 2,580,000 total, DRAFT status, and version 0.
+
+### Idempotent submission
+
+- The first request reserves an organization-scoped `PROCUREMENT_SUBMIT` key and stores its request hash and serialized success result.
+- Repeating the same key and hash returns the original result without a second submit or audit event.
+- Reusing the key with a different hash returns `IDEMPOTENCY_KEY_REUSED`.
+- Verified database counts: one idempotency record and one `REQUEST_SUBMITTED` audit event.
+
+### Stale approval and child-row identity
+
+- Contract RED: approval service, result, and conflict types did not exist.
+- Functional RED: rebuilding a restored JPA aggregate generated a new approval-step ID and violated `uq_approval_step_sequence`.
+- Resolution: persisted aggregates now load their managed entity and update existing approval-step rows by sequence. New aggregate creation remains a separate path.
+- A first approval succeeds; a repeated approval with the stale expected version returns `REQUEST_VERSION_CONFLICT`; exactly one `REQUEST_APPROVED` audit event remains.
+- Evidence: `docs/incidents/evidence/INC-001/red.txt` and `green.txt`.
+
+### Verification
+
+- Fresh full result after Task 5: 20 tests, 0 failures, 0 errors.
+- Public-data scan found no personal email, local home path, private key, authorization token, revenue tracker, or candidate packet in tracked source.

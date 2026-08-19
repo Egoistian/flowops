@@ -17,6 +17,8 @@ public final class ProcurementRequest {
     private final List<ProcurementItem> items = new ArrayList<>();
     private ProcurementStatus status;
     private ApprovalPlan approvalPlan;
+    private long version;
+    private boolean persisted;
 
     private ProcurementRequest(
             UUID id,
@@ -32,6 +34,8 @@ public final class ProcurementRequest {
         this.purpose = requireText(purpose, "purpose");
         this.budgetCode = requireText(budgetCode, "budgetCode");
         this.status = ProcurementStatus.DRAFT;
+        this.version = 0;
+        this.persisted = false;
     }
 
     public static ProcurementRequest draft(
@@ -43,6 +47,27 @@ public final class ProcurementRequest {
         return new ProcurementRequest(
                 UUID.randomUUID(), organizationId, requesterId,
                 title, purpose, budgetCode);
+    }
+
+    public static ProcurementRequest restore(
+            UUID id,
+            UUID organizationId,
+            UUID requesterId,
+            String title,
+            String purpose,
+            String budgetCode,
+            ProcurementStatus status,
+            long version,
+            List<ProcurementItem> items,
+            ApprovalPlan approvalPlan) {
+        ProcurementRequest request = new ProcurementRequest(
+                id, organizationId, requesterId, title, purpose, budgetCode);
+        request.status = status;
+        request.version = version;
+        request.items.addAll(items);
+        request.approvalPlan = approvalPlan;
+        request.persisted = true;
+        return request;
     }
 
     public void addItem(String name, int quantity, Money unitPrice) {
@@ -116,6 +141,18 @@ public final class ProcurementRequest {
 
     public ProcurementStatus status() {
         return status;
+    }
+
+    public long version() {
+        return version;
+    }
+
+    public boolean persisted() {
+        return persisted;
+    }
+
+    public java.util.Optional<ApprovalPlan> approvalPlan() {
+        return java.util.Optional.ofNullable(approvalPlan);
     }
 
     private void requireStatus(ProcurementStatus expected) {

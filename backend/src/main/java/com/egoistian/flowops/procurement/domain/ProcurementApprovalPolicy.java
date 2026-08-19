@@ -4,7 +4,9 @@ import com.egoistian.flowops.workflow.domain.ApprovalPlan;
 import com.egoistian.flowops.workflow.domain.ApprovalStepDefinition;
 
 import java.util.List;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ProcurementApprovalPolicy {
     public ApprovalPlan createPlan(Money totalAmount) {
         if (totalAmount.amount() < 1_000_000) {

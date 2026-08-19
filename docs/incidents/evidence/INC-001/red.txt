@@ -1,0 +1,33 @@
+FlowOps INC-001 RED evidence
+Command: ./gradlew test --tests com.egoistian.flowops.procurement.ConcurrentApprovalTest
+Exit code: 1
+Observed failure reason: the approval application contract did not exist.
+
+Selected unedited compiler output:
+
+error: cannot find symbol
+  symbol:   class ApprovalResult
+  location: package com.egoistian.flowops.procurement.application
+
+error: cannot find symbol
+  symbol:   class ApproveProcurementRequest
+  location: package com.egoistian.flowops.procurement.application
+
+error: cannot find symbol
+  symbol:   class RequestVersionConflict
+  location: package com.egoistian.flowops.procurement.application
+
+BUILD FAILED
+
+Functional RED after the minimum approval service existed
+Command: ./gradlew test --tests com.egoistian.flowops.procurement.ConcurrentApprovalTest
+Exit code: 1
+Observed failure reason: re-mapping the restored aggregate generated a new approval-step ID and attempted a duplicate insert before the existing child row could be updated.
+
+Selected unedited database output:
+
+DataIntegrityViolationException: could not execute statement
+ERROR: duplicate key value violates unique constraint "uq_approval_step_sequence"
+Detail: Key (organization_id, request_id, sequence_number) already exists.
+
+BUILD FAILED

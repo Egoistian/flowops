@@ -18,6 +18,20 @@ public final class ApprovalPlan {
                 .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
     }
 
+    private ApprovalPlan(List<ApprovalStepSnapshot> snapshots, boolean restored) {
+        this.steps = snapshots.stream()
+                .map(snapshot -> new ApprovalStep(
+                        snapshot.sequence(), snapshot.requiredRole(), snapshot.approvedBy()))
+                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+    }
+
+    public static ApprovalPlan restore(List<ApprovalStepSnapshot> snapshots) {
+        if (snapshots == null || snapshots.isEmpty()) {
+            throw new IllegalArgumentException("at least one approval step is required");
+        }
+        return new ApprovalPlan(snapshots, true);
+    }
+
     public List<String> requiredRoles() {
         return steps.stream().map(ApprovalStep::requiredRole).toList();
     }
@@ -41,14 +55,30 @@ public final class ApprovalPlan {
         return steps.stream().allMatch(step -> step.approvedBy() != null);
     }
 
+    public List<ApprovalStepSnapshot> snapshots() {
+        return steps.stream()
+                .map(step -> new ApprovalStepSnapshot(
+                        step.sequence(), step.requiredRole(), step.approvedBy()))
+                .toList();
+    }
+
     private static final class ApprovalStep {
         private final int sequence;
         private final String requiredRole;
         private UUID approvedBy;
 
         private ApprovalStep(int sequence, String requiredRole) {
+            this(sequence, requiredRole, null);
+        }
+
+        private ApprovalStep(int sequence, String requiredRole, UUID approvedBy) {
             this.sequence = sequence;
             this.requiredRole = requiredRole;
+            this.approvedBy = approvedBy;
+        }
+
+        int sequence() {
+            return sequence;
         }
 
         String requiredRole() {
