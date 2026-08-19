@@ -9,7 +9,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     flowopsApi.session()
-      .then(setSession)
+      .then((current) => setSession(current ?? null))
       .catch(() => setSession(null))
       .finally(() => setLoading(false))
   }, [])

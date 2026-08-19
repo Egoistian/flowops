@@ -124,3 +124,17 @@
 - App routes: new procurement request and request detail. Draft creation navigates to the actual request URL; submit reloads the server state.
 - Verification: 3 Vitest tests pass, Oxlint emits no warnings, TypeScript and Vite production build succeed.
 - Generated Vite logo and hero assets were removed before commit.
+
+## 2026-08-19 23:55 KST — Docker and browser verification
+
+- Local tool gap: the Docker CLI lacked Compose; Homebrew `docker-compose` 5.5.0 was installed to execute the approved local verification plan.
+- First backend image attempt failed because Temurin 17 Alpine had no Linux arm64 manifest. The Dockerfile now uses multi-architecture Temurin 17 Jammy build/runtime stages and runs as a non-root `flowops` user.
+- Core services: PostgreSQL 16 Alpine, Spring Boot backend, and Nginx frontend.
+- Demo data is isolated under `db/demo/V900__demo_accounts.sql` and included only when Docker sets the extra Flyway location.
+- Browser RED: no server produced `ERR_CONNECTION_REFUSED`; the first live login then exposed a real raw-cookie/XOR CSRF mismatch.
+- CSRF resolution: a regression test now sends the actual `XSRF-TOKEN` cookie value through `X-XSRF-TOKEN`; Spring uses an explicit raw `CsrfTokenRequestAttributeHandler` for the SPA.
+- Session probe resolution: unauthenticated `GET /api/session` returns 204 instead of a noisy expected 401, while protected business APIs remain authenticated.
+- Logout returns 204 and invalidates the session.
+- Playwright GREEN: create, submit, log out, log in as another organization, and verify hidden request 404.
+- Real desktop login, desktop request, and mobile request screenshots were captured with fictional data and zero browser console/page errors.
+- Mobile table was reworked to prevent Korean words and currency values from breaking per character.

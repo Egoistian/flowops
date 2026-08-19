@@ -12,6 +12,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.http.HttpMethod;
 
 @Configuration
 public class SecurityConfiguration {
@@ -41,7 +43,9 @@ public class SecurityConfiguration {
         csrf.setHeaderName("X-XSRF-TOKEN");
 
         return http
-                .csrf(configurer -> configurer.csrfTokenRepository(csrf))
+                .csrf(configurer -> configurer
+                        .csrfTokenRepository(csrf)
+                        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()))
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exceptions -> exceptions
@@ -53,6 +57,7 @@ public class SecurityConfiguration {
                                 "/api/session/login",
                                 "/api/session/csrf")
                         .permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/session").permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().denyAll())
                 .sessionManagement(session -> session
@@ -60,7 +65,9 @@ public class SecurityConfiguration {
                 .logout(logout -> logout
                         .logoutUrl("/api/session/logout")
                         .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID"))
+                        .deleteCookies("JSESSIONID")
+                        .logoutSuccessHandler((request, response, authentication) ->
+                                response.setStatus(204)))
                 .build();
     }
 }

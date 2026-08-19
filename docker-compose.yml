@@ -1,0 +1,47 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: flowops
+      POSTGRES_USER: flowops
+      POSTGRES_PASSWORD: ${FLOWOPS_DB_PASSWORD:-flowops-local-only}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U flowops -d flowops"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - flowops-postgres:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/flowops
+      SPRING_DATASOURCE_USERNAME: flowops
+      SPRING_DATASOURCE_PASSWORD: ${FLOWOPS_DB_PASSWORD:-flowops-local-only}
+      SPRING_FLYWAY_LOCATIONS: classpath:db/migration,classpath:db/demo
+      SERVER_SERVLET_SESSION_COOKIE_SECURE: "false"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/actuator/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "4173:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1/ >/dev/null"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  flowops-postgres:

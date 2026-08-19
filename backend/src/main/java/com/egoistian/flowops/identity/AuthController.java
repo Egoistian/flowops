@@ -41,8 +41,11 @@ public class AuthController {
     }
 
     @GetMapping
-    SessionResponse current(@AuthenticationPrincipal AuthenticatedUser user) {
-        return SessionResponse.from(user);
+    ResponseEntity<SessionResponse> current(@AuthenticationPrincipal AuthenticatedUser user) {
+        if (user == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(SessionResponse.from(user));
     }
 
     @PostMapping("/login")

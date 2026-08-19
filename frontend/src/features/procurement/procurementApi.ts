@@ -18,7 +18,7 @@ type DraftResult = {
 }
 
 export const flowopsApi = {
-  session: () => api<Session>('/api/session'),
+  session: () => api<Session | null>('/api/session'),
   login: (input: LoginInput) => api<Session>('/api/session/login', {
     method: 'POST',
     body: JSON.stringify(input),

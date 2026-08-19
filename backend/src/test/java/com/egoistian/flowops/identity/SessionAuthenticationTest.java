@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
+import jakarta.servlet.http.Cookie;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.annotation.DirtiesContext;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -20,6 +22,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.containsString;
 
 @AutoConfigureMockMvc
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 @Sql(scripts = "/db/testdata/demo_accounts.sql")
 @Sql(statements = {
         "delete from user_roles",
@@ -108,9 +111,52 @@ class SessionAuthenticationTest extends PostgresIntegrationTest {
     }
 
     @Test
-    void rejectsSessionLookupWithoutAuthentication() throws Exception {
+    void returnsNoContentWhenNoSessionExists() throws Exception {
         mockMvc.perform(get("/api/session"))
-                .andExpect(status().isUnauthorized())
-                .andExpect(jsonPath("$.code").value("INVALID_CREDENTIALS"));
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void logsOutWithNoContentAndInvalidatesTheSession() throws Exception {
+        MvcResult login = mockMvc.perform(post("/api/session/login")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "organizationKey": "northstar",
+                                  "email": "requester@northstar.example.com",
+                                  "password": "demo-password"
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andReturn();
+        MockHttpSession session = (MockHttpSession) login.getRequest().getSession(false);
+
+        mockMvc.perform(post("/api/session/logout").session(session).with(csrf()))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(get("/api/session").session(session))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void acceptsTheRawCsrfCookieValueFromTheSpaHeader() throws Exception {
+        MvcResult bootstrap = mockMvc.perform(get("/api/session/csrf"))
+                .andExpect(status().isOk())
+                .andReturn();
+        Cookie csrfCookie = bootstrap.getResponse().getCookie("XSRF-TOKEN");
+
+        mockMvc.perform(post("/api/session/login")
+                        .cookie(csrfCookie)
+                        .header("X-XSRF-TOKEN", csrfCookie.getValue())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "organizationKey": "northstar",
+                                  "email": "requester@northstar.example.com",
+                                  "password": "demo-password"
+                                }
+                                """))
+                .andExpect(status().isOk());
     }
 }
