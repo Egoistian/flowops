@@ -19,7 +19,7 @@ if [[ "$docker_host" == unix://* ]]; then
 fi
 
 printf 'VERIFY backend-tests\n'
-(cd "$project_root/backend" && ./gradlew test --console=plain)
+(cd "$project_root/backend" && ./gradlew test --rerun-tasks --console=plain)
 
 printf 'VERIFY frontend-lint-test-build\n'
 (cd "$project_root/frontend" && npm run lint && npm test -- --run && npm run build)
