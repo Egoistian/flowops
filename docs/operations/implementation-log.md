@@ -138,3 +138,12 @@
 - Playwright GREEN: create, submit, log out, log in as another organization, and verify hidden request 404.
 - Real desktop login, desktop request, and mobile request screenshots were captured with fictional data and zero browser console/page errors.
 - Mobile table was reworked to prevent Korean words and currency values from breaking per character.
+
+## 2026-08-20 00:02 KST — Public-readiness documentation and gates
+
+- Added English and Korean repository introductions, explicit claim boundaries, local demo instructions, security policy, module map, ERD, and bilingual portfolio case studies.
+- Expanded INC-001 into a full development-reproduced incident record with impact, reproduction, root cause, rejected alternatives, selected fix, regression, and limits.
+- Added local CI workflow definition for wrapper validation, backend tests, frontend verification, Docker Compose E2E, and public-safety gates. Remote CI remains unverified until a real GitHub Actions run is observed.
+- Added blocking checks for browser auth storage, personal emails, home paths, credential shapes, internal revenue workflow files, forbidden tracked artifacts, and the complete Git history.
+- Current safety checks: `PASS browser-auth-storage`, `PASS public-safety`.
+- License remains intentionally unselected; repository creation, public visibility, remote addition, and push remain exact external-action gates.
