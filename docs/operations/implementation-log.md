@@ -81,3 +81,34 @@
 
 - Fresh full result after Task 5: 20 tests, 0 failures, 0 errors.
 - Public-data scan found no personal email, local home path, private key, authorization token, revenue tracker, or candidate packet in tracked source.
+
+## 2026-08-19 23:25 KST — Procurement API and stable problems
+
+### API surface
+
+- `POST /api/procurement/requests`: creates a DRAFT from the authenticated organization and requester, recalculates the total, and returns 201 plus `Location`.
+- `GET /api/procurement/requests/{id}`: reads only inside the authenticated organization scope.
+- `POST /api/procurement/requests/{id}/submit`: uses a client idempotency key and a server-calculated canonical SHA-256.
+- `POST /api/procurement/requests/{id}/approve`: derives actor and roles from the authenticated session and accepts only `expectedVersion` from the body.
+
+### Stable problem contract
+
+- Validation: 400 / `VALIDATION_FAILED` / sorted field errors.
+- Hidden or missing request: 404 / `PROCUREMENT_NOT_FOUND`.
+- Idempotency reuse: 409 / `IDEMPOTENCY_KEY_REUSED`.
+- Stale approval: 409 / `REQUEST_VERSION_CONFLICT`.
+- Invalid state transition: 422 with its domain code.
+- Authentication: generic 401 / `INVALID_CREDENTIALS`.
+- CSRF or access denial: JSON 403 / `CSRF_FAILED` or `ACCESS_DENIED`.
+- Every tested error includes a generated `traceId`; the same value is also returned in `X-Trace-Id`.
+
+### Problems reproduced and resolved
+
+- Spring Boot's default validation Problem Detail took precedence over the application advice and omitted stable fields. `ApiProblemHandler` now has explicit highest precedence.
+- A missing `items` field passed `@Size` because null is valid for that constraint, then caused a controller NPE. Adding `@NotNull` converts the case to the same stable validation response as an empty or invalid list.
+- The initial API draft allowed the client to send `requestHash`. The server now computes the SHA-256 from the authenticated organization, operation, and request ID; the client supplies only the idempotency key.
+
+### Verification
+
+- Fresh full result after Task 6: 26 tests, 0 failures, 0 errors.
+- Public-data scan found no personal email, local home path, private key, bearer token, revenue tracker, or candidate packet.

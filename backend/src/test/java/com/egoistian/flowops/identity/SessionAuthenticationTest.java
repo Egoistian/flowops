@@ -62,6 +62,7 @@ class SessionAuthenticationTest extends PostgresIntegrationTest {
                                 """))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.code").value("INVALID_CREDENTIALS"))
+                .andExpect(jsonPath("$.traceId").isNotEmpty())
                 .andExpect(content().string(not(containsString("requester@northstar.example.com"))));
     }
 
@@ -100,8 +101,10 @@ class SessionAuthenticationTest extends PostgresIntegrationTest {
                                   "email": "requester@northstar.example.com",
                                   "password": "demo-password"
                                 }
-                                """))
-                .andExpect(status().isForbidden());
+                """))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.code").value("CSRF_FAILED"))
+                .andExpect(jsonPath("$.traceId").isNotEmpty());
     }
 
     @Test

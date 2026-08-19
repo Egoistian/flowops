@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
+import com.egoistian.flowops.shared.api.TraceIdFilter;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -34,6 +35,7 @@ public class JsonAuthenticationEntryPoint implements AuthenticationEntryPoint {
         problem.put("detail", "The supplied credentials are invalid.");
         problem.put("instance", request.getRequestURI());
         problem.put("code", "INVALID_CREDENTIALS");
+        problem.put("traceId", request.getAttribute(TraceIdFilter.REQUEST_ATTRIBUTE));
         objectMapper.writeValue(response.getOutputStream(), problem);
     }
 }
