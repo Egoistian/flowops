@@ -112,3 +112,15 @@
 
 - Fresh full result after Task 6: 26 tests, 0 failures, 0 errors.
 - Public-data scan found no personal email, local home path, private key, bearer token, revenue tracker, or candidate packet.
+
+## 2026-08-19 23:38 KST — React procurement workflow
+
+- Runtime: Node 20.20.2, npm 10.8.2, React 19.2.8, Vite 8.2.1.
+- `npm audit`: 0 vulnerabilities at installation time.
+- Visual direction: industrial editorial operations console using bundled IBM Plex Sans KR and IBM Plex Mono; warm paper surfaces, ink typography, restrained teal and orange states, no colored left-edge accent bars.
+- Component RED/GREEN: purchase form total and payload boundary, organization login payload, and conflict reload while preserving an unsent review note.
+- A real form-boundary bug was fixed: React Hook Form passed the submit event as a second callback argument; the component now forwards only the allowed DTO.
+- Login and API client use session cookies plus CSRF bootstrap with `credentials: include`; no token persistence or browser auth storage exists.
+- App routes: new procurement request and request detail. Draft creation navigates to the actual request URL; submit reloads the server state.
+- Verification: 3 Vitest tests pass, Oxlint emits no warnings, TypeScript and Vite production build succeed.
+- Generated Vite logo and hero assets were removed before commit.
