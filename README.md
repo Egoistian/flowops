@@ -39,6 +39,8 @@ The backend is a modular monolith. Domain rules do not depend on controllers or 
 
 ## Quick start
 
+> **Local demo only:** the Compose profile binds the web entry point to `127.0.0.1:4173`, loads public demo credentials, uses a local fallback database password, and disables the session cookie's `Secure` attribute so plain HTTP works on the same machine. Do not expose this profile to a LAN or the public internet. A real deployment must remove the demo Flyway location, use managed secrets, enforce HTTPS and secure cookies, and complete a production security review.
+
 Requirements:
 
 - Docker with Compose support
@@ -65,11 +67,12 @@ The local-only demo password is `demo-password`. Do not enable `classpath:db/dem
 
 ```bash
 ./scripts/verify-first-slice.sh
+./scripts/check-local-demo-network.sh
 ./scripts/check-no-browser-auth-storage.sh
 ./scripts/check-public-safety.sh
 ```
 
-The verification pipeline runs backend tests, frontend lint/tests/build, container health, and the Playwright journey. The public-safety gate checks current files and Git history for personal email addresses, home paths, common credential shapes, internal revenue-workflow files, logs, environment files, and browser traces.
+The verification pipeline runs the local-network exposure gate, backend tests, frontend lint/tests/build, container health, and the Playwright journey. The public-safety gate checks current files and Git history for personal email addresses, home paths, common credential shapes, internal revenue-workflow files, logs, environment files, and browser traces.
 
 ## Stable errors
 
@@ -84,12 +87,13 @@ API failures use `application/problem+json` with a stable `code` and `traceId`. 
 - Procurement is the only complete workflow in this milestone.
 - Content publication and field-service modules are designed but not implemented in this slice.
 - Demo credentials are for local verification only.
+- The Compose profile is not a production deployment template: it intentionally uses local-only credentials, loopback HTTP, and `Secure=false` for the session cookie.
 - There is no payment, refund, settlement, medical, industrial-device, or regulated-data integration.
 - There is no public production deployment, user count, uptime record, client acceptance, contract, or revenue claim.
 - The CI workflow is prepared locally but cannot be called remotely verified until a repository is published and an actual run is observed.
 
 ## Repository status and license
 
-This milestone is prepared for a later public GitHub review. No license is granted until the owner explicitly selects and commits a license. GitHub repository creation, visibility, remote addition, and push remain separate approval-gated actions.
+This project is licensed under the [MIT License](LICENSE). A public source repository proves code availability and reviewability only; it does not prove a production deployment, customer use, external acceptance, or realized revenue.
 
 한국어 문서: [README.ko.md](README.ko.md)

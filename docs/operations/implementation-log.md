@@ -147,3 +147,14 @@
 - Added blocking checks for browser auth storage, personal emails, home paths, credential shapes, internal revenue workflow files, forbidden tracked artifacts, and the complete Git history.
 - Current safety checks: `PASS browser-auth-storage`, `PASS public-safety`.
 - License remains intentionally unselected; repository creation, public visibility, remote addition, and push remain exact external-action gates.
+
+## 2026-08-20 08:49 KST — Publication hardening and MIT boundary
+
+- RED: the rendered Compose configuration failed a new local-network exposure gate because the frontend port was not restricted to the loopback interface.
+- GREEN: the frontend now publishes only `127.0.0.1:4173:80`; backend and PostgreSQL continue to publish no host ports.
+- English and Korean READMEs now distinguish the local demo profile from a production deployment. They call out demo migrations, local fallback credentials, loopback HTTP, `Secure=false`, managed secrets, HTTPS, secure cookies, and the need for a separate production security review.
+- Added the MIT License selected by the repository owner and retained the boundary between public source, production deployment, customer use, external acceptance, and revenue.
+- GitHub Actions now runs the same local-network gate before the existing browser-storage and public-safety gates.
+- Fresh local verification: 28 backend tests with zero failures/errors, 3 frontend tests, clean lint, production build, healthy Compose services, and 1 Chromium cross-organization E2E.
+- A sandboxed standalone Chromium launch failed at the macOS Mach-port boundary. Re-running the identical E2E with the required process permission passed without a source change, confirming an execution-environment restriction rather than an application regression.
+- Current safety checks: `PASS local-demo-network`, `PASS browser-auth-storage`, and `PASS public-safety`.

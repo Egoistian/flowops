@@ -12,6 +12,9 @@ else
   exit 1
 fi
 
+printf 'VERIFY local-demo-network\n'
+"$project_root/scripts/check-local-demo-network.sh"
+
 docker_host="$(docker context inspect "$(docker context show)" --format '{{.Endpoints.docker.Host}}')"
 if [[ "$docker_host" == unix://* ]]; then
   export DOCKER_HOST="$docker_host"
