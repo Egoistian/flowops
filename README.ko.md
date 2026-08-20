@@ -61,6 +61,8 @@ Docker 데모 환경에서만 다음 가상 계정을 설치합니다.
 
 ## 공개 CI 복구 사례
 
+**현재 상태:** 애플리케이션과 브라우저 E2E는 최초 원격 실행부터 통과했고 고객 영향은 없었습니다. 수정된 CI 경계는 두 번 연속 통과했으며 공개 `main`은 성공 상태입니다.
+
 ![FlowOps CI 복구 타임라인](docs/portfolio/screenshots/flowops-ci-recovery-1600x1200.png)
 
 첫 GitHub Actions 실행은 애플리케이션과 브라우저 E2E를 통과한 뒤 Compose 안전 검사에서 실패했습니다. 로컬 macOS와 GitHub Ubuntu가 같은 도구를 서로 다른 명령 형태로 제공한 것이 원인이었습니다. [INC-002](docs/incidents/INC-002-compose-cli-portability.md)에 실패 흐름, 고찰, 기각한 해결안, plugin-only 회귀 테스트와 두 번의 원격 성공을 기록했습니다.

@@ -31,6 +31,14 @@
 
 ## 공개 과정에서 발견한 CI 호환성 문제
 
+| 현재 상태 | 결과 |
+|---|---|
+| 애플리케이션·E2E | 최초 원격 실행부터 통과 |
+| 고객·프로덕션 영향 | 없음 |
+| 실패한 경계 | CI 안전 검사 명령 호환성 |
+| 수정 후 원격 CI | 2회 연속 성공 |
+| 공개 `main` | 성공 |
+
 ![FlowOps CI 복구 타임라인](screenshots/flowops-ci-recovery-1600x1200.png)
 
 로컬 전체 검증을 통과한 뒤 GitHub에 공개했지만, 첫 Actions 실행은 마지막 공개 안전 검사에서 실패했습니다. 백엔드·프런트엔드·Docker·Playwright E2E는 원격에서도 이미 통과한 상태였습니다. 실패 로그의 첫 원인은 Ubuntu에 없는 `docker-compose` 명령이었습니다. GitHub 러너는 같은 기능을 `docker compose` 플러그인으로 제공했습니다.

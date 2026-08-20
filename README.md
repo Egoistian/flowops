@@ -86,6 +86,8 @@ API failures use `application/problem+json` with a stable `code` and `traceId`. 
 
 ## Publication CI recovery
 
+**Current status:** application and browser E2E passed from the first remote run; customer impact was none; the repaired CI boundary passed twice; public `main` is green.
+
 ![FlowOps CI recovery timeline](docs/portfolio/screenshots/flowops-ci-recovery-1600x1200.png)
 
 The first public GitHub Actions run passed the application and browser E2E but failed in a Compose safety gate because local macOS and the Ubuntu runner exposed the same tool through different command shapes. [INC-002](docs/incidents/INC-002-compose-cli-portability.md) records the failure chain, reflection, rejected fixes, plugin-only regression, and two consecutive remote successes.

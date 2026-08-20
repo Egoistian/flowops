@@ -106,8 +106,8 @@ const html = `<!doctype html>
     <div class="meta">Independent build evidence<br>macOS local → GitHub Ubuntu</div>
   </div>
 
-  <h1>LOCAL GREEN<br>≠ REMOTE GREEN</h1>
-  <div class="dek">A failed safety gate became an explicit portability contract—then passed twice on the public runner.</div>
+  <h1>LOCAL GREEN<br>→ VERIFIED REMOTE</h1>
+  <div class="dek">The first public run exposed one portability assumption. The repaired boundary passed twice.</div>
 
   <section class="timeline">
     <article class="stage pass">

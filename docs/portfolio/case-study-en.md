@@ -10,6 +10,14 @@ The locally verified boundary includes backend integration tests, frontend compo
 
 ## CI portability failure found during publication
 
+| Current status | Result |
+|---|---|
+| Application and browser E2E | Passed from the first remote run |
+| Customer or production impact | None |
+| Failed boundary | CI safety-script command portability |
+| Remote CI after the fix | Two consecutive passes |
+| Public `main` | Green |
+
 ![FlowOps CI recovery timeline](screenshots/flowops-ci-recovery-1600x1200.png)
 
 The first GitHub Actions run failed after the locally green repository was published. Backend tests, frontend verification, Docker startup, and Playwright E2E had already passed on the Ubuntu runner. Only the final public-safety step failed. Its first actionable error was `docker-compose: command not found`: the local Mac used the standalone command, while GitHub exposed Compose as the `docker compose` plugin.
