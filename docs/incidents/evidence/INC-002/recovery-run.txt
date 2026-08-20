@@ -1,0 +1,29 @@
+FlowOps GitHub Actions — verified recovery
+
+Compatibility fix run:
+- Run: 32315315195
+- Commit: b794cbec7d159d0572e1b3ac42768e9367377e3b
+- Conclusion: success
+
+Final public-main run:
+- Run: 32315607695
+- Commit: 2297bce31a1d0fa9820b98378673e78eb4a8003c
+- Conclusion: success
+
+Final successful steps:
+- Backend tests
+- Frontend verification
+- Browser installation
+- Compose and E2E
+- Public-safety checks
+
+Local safety results:
+- PASS compose-plugin-compatibility
+- PASS local-demo-network
+- PASS browser-auth-storage
+- PASS public-safety
+
+Boundaries:
+- Public source verification only
+- No hosted production deployment
+- No customer incident, contract, payment, or revenue claim
