@@ -160,3 +160,4 @@
 - Current safety checks: `PASS local-demo-network`, `PASS browser-auth-storage`, and `PASS public-safety`.
 - First remote CI RED: GitHub's Ubuntu runner exposed Compose only as `docker compose`, while the new gate called the locally installed standalone `docker-compose` command.
 - Compatibility GREEN: the gate now selects the plugin form first and falls back to the standalone command. A controlled fake-CLI regression proves the plugin-only environment before the actual rendered Compose check runs.
+- Remote GREEN: GitHub Actions run `32315315195` passed backend tests, frontend verification, browser installation, Compose E2E, and all public-safety checks on commit `b794cbe`.

@@ -1,5 +1,7 @@
 # FlowOps
 
+[![FlowOps verification](https://github.com/Egoistian/flowops/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Egoistian/flowops/actions/workflows/ci.yml)
+
 FlowOps is an independently developed operational approval portfolio built with Java 17, Spring Boot 3.5, PostgreSQL, React, and TypeScript. The first public-ready slice turns a procurement request into a traceable workflow with organization-scoped authentication, server-calculated totals, idempotent submission, optimistic version checks, stable API problems, and real browser verification.
 
 > Portfolio boundary: this repository demonstrates independent implementation and local verification. It is not a paid client delivery, formal employment record, production customer system, payment platform, or claim of commercial scale.
@@ -90,7 +92,7 @@ API failures use `application/problem+json` with a stable `code` and `traceId`. 
 - The Compose profile is not a production deployment template: it intentionally uses local-only credentials, loopback HTTP, and `Secure=false` for the session cookie.
 - There is no payment, refund, settlement, medical, industrial-device, or regulated-data integration.
 - There is no public production deployment, user count, uptime record, client acceptance, contract, or revenue claim.
-- The CI workflow is prepared locally but cannot be called remotely verified until a repository is published and an actual run is observed.
+- The public `main` branch is exercised by GitHub Actions. Local verification and the current remote workflow result remain separate evidence; see the linked Actions history for the latest status.
 
 ## Repository status and license
 

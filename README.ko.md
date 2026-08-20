@@ -1,5 +1,7 @@
 # FlowOps
 
+[![FlowOps verification](https://github.com/Egoistian/flowops/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Egoistian/flowops/actions/workflows/ci.yml)
+
 FlowOps는 Java 17, Spring Boot 3.5, PostgreSQL, React, TypeScript로 만든 독립 개발 업무 승인 포트폴리오입니다. 첫 공개 준비 범위는 구매 요청을 중심으로 조직별 인증, 서버 금액 계산, 중복 제출 방지, version 충돌, 일관된 API 오류, 실제 브라우저 검증을 연결합니다.
 
 > 표현 경계: 이 저장소는 독립 구현과 로컬 검증 증거입니다. 유료 고객 납품, 정규 근무 경력, 실제 운영 고객 시스템, 결제 플랫폼, 대규모 트래픽 처리 실적으로 표현하지 않습니다.
@@ -64,7 +66,7 @@ Docker 데모 환경에서만 다음 가상 계정을 설치합니다.
 - Compose 프로필은 로컬 데모용이며, 로컬 전용 비밀번호·루프백 HTTP·세션 쿠키 `Secure=false`를 의도적으로 사용하므로 운영 배포 템플릿이 아닙니다.
 - 실결제·환불·정산·의료 데이터·산업 장비 연동은 없습니다.
 - 공개 프로덕션 배포, 사용자 수, 가동률, 고객 검수, 계약, 지급, 수익 증거는 없습니다.
-- CI 파일은 로컬에서 작성했으며 실제 GitHub Actions 실행 전에는 원격 CI 성공으로 주장하지 않습니다.
+- 공개 `main`은 GitHub Actions에서 검증합니다. 로컬 검증과 현재 원격 워크플로 결과는 서로 다른 증거이며, 최신 상태는 연결된 Actions 기록에서 확인합니다.
 
 ## 공개와 라이선스
 
