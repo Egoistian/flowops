@@ -84,6 +84,14 @@ API failures use `application/problem+json` with a stable `code` and `traceId`. 
 
 [INC-001](docs/incidents/INC-001-concurrent-approval.md) documents a child-row identity failure discovered while implementing stale approval protection. The evidence separates the failing test, root cause, selected fix, passing regression, and remaining limits. It does not describe a customer production incident.
 
+## Publication CI recovery
+
+**Current status:** application and browser E2E passed from the first remote run; customer impact was none; the repaired CI boundary passed twice; public `main` is green.
+
+![FlowOps CI recovery timeline](docs/portfolio/screenshots/flowops-ci-recovery-1600x1200.png)
+
+The first public GitHub Actions run passed the application and browser E2E but failed in a Compose safety gate because local macOS and the Ubuntu runner exposed the same tool through different command shapes. [INC-002](docs/incidents/INC-002-compose-cli-portability.md) records the failure chain, reflection, rejected fixes, plugin-only regression, and two consecutive remote successes.
+
 ## Current limits
 
 - Procurement is the only complete workflow in this milestone.

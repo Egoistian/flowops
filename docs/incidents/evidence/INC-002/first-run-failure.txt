@@ -1,0 +1,20 @@
+FlowOps GitHub Actions — first public run
+
+Run: 32314882027
+Commit: f857462f89584a19dcfeb49883d7df24e9a503ea
+Conclusion: failure
+
+Passed before the failure:
+- Backend tests
+- Frontend verification
+- Browser installation
+- Compose and E2E
+
+Failing step:
+- Public-safety checks
+
+First actionable error:
+./scripts/check-local-demo-network.sh: line 7: docker-compose: command not found
+
+The following JSON parse error was a secondary effect of the missing Compose output.
+No customer or production system was involved.

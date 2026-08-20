@@ -59,6 +59,14 @@ Docker 데모 환경에서만 다음 가상 계정을 설치합니다.
 
 [INC-001](docs/incidents/INC-001-concurrent-approval.md)은 오래된 승인 version을 구현하는 과정에서 승인 단계 자식 행의 ID를 잃어 고유 제약을 위반한 문제를 기록합니다. 실제 고객 장애가 아니라 개발 중 테스트로 재현한 문제이며, RED·원인·대안·수정·GREEN·남은 한계를 구분합니다.
 
+## 공개 CI 복구 사례
+
+**현재 상태:** 애플리케이션과 브라우저 E2E는 최초 원격 실행부터 통과했고 고객 영향은 없었습니다. 수정된 CI 경계는 두 번 연속 통과했으며 공개 `main`은 성공 상태입니다.
+
+![FlowOps CI 복구 타임라인](docs/portfolio/screenshots/flowops-ci-recovery-1600x1200.png)
+
+첫 GitHub Actions 실행은 애플리케이션과 브라우저 E2E를 통과한 뒤 Compose 안전 검사에서 실패했습니다. 로컬 macOS와 GitHub Ubuntu가 같은 도구를 서로 다른 명령 형태로 제공한 것이 원인이었습니다. [INC-002](docs/incidents/INC-002-compose-cli-portability.md)에 실패 흐름, 고찰, 기각한 해결안, plugin-only 회귀 테스트와 두 번의 원격 성공을 기록했습니다.
+
 ## 현재 한계
 
 - 이번 공개 준비 범위에서 완성한 업무 모듈은 구매 요청입니다.
